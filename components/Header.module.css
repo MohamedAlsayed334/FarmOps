@@ -1,0 +1,109 @@
+.header {
+  height: 64px;
+  background: #0f1318;
+  border-bottom: 1px solid #1e2733;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menuBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #161c24;
+  border: 1px solid #1e2733;
+  border-radius: 8px;
+  color: #e8edf2;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.menuBtn:hover {
+  background: #1c232c;
+  border-color: #2a3444;
+}
+
+.menuBtn:active {
+  transform: scale(0.95);
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #e8edf2;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: #5a6878;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.homeBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #161c24;
+  border: 1px solid #1e2733;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #a0aab8;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.homeBtn:hover {
+  background: #1c232c;
+  color: #e8edf2;
+  border-color: #2a3444;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(61, 220, 151, 0.08);
+  border: 1px solid rgba(61, 220, 151, 0.2);
+  border-radius: 8px;
+  font-size: 11px;
+  color: #3ddc97;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  background: #3ddc97;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
