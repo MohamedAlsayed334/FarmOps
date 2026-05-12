@@ -11,6 +11,12 @@ const queryInfo = {
   'order-lines-details': { name: 'Order Lines + Harvest + Farms', desc: 'View order line items with their harvest batch and farm sources' },
   'farm-specializations': { name: 'Farm Specializations', desc: 'View which crops each farm specializes in' },
   'delivery-trip-lines': { name: 'Delivery Trip Lines + Orders', desc: 'View delivery stops with their order details' },
+  'top-crop-by-orders': { name: 'Top Crop Type by Orders', desc: 'Which crop type had the maximum number of orders placed by restaurants' },
+  'farms-no-activity-last-month': { name: 'Farms with No Activity', desc: 'Which farms had no harvest batches listed or sold during the last month' },
+  'top-driver-last-month': { name: 'Top Driver by Trips', desc: 'Driver who completed the highest number of delivery trips last month' },
+  'restaurants-no-orders-last-month': { name: 'Inactive Restaurants', desc: 'Restaurants that did not place any produce orders last month' },
+  'restaurant-batches-last-month': { name: 'Harvest Batches per Restaurant', desc: 'Harvest batches delivered to each restaurant last month' },
+  'farm-revenue': { name: 'Farm Revenue', desc: 'Total revenue generated from each farm\'s sold batches' },
 };
 
 export default function QueryPage() {
@@ -22,6 +28,17 @@ export default function QueryPage() {
   const [columns, setColumns] = useState([]);
 
   const info = queryInfo[queryName] || { name: queryName, desc: '' };
+
+  useEffect(() => {
+    const handleHMRError = (event) => {
+      if (event.reason?.message?.includes('ChunkLoadError') || 
+          event.reason?.message?.includes('Failed to load chunk')) {
+        window.location.reload();
+      }
+    };
+    window.addEventListener('unhandledrejection', handleHMRError);
+    return () => window.removeEventListener('unhandledrejection', handleHMRError);
+  }, []);
 
   useEffect(() => {
     fetchData();

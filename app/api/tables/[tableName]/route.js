@@ -17,19 +17,24 @@ export async function POST(request) {
     const body = await request.json();
     const tableName = body.tableName;
     const data = body.data;
-    
+
     if (!data || typeof data !== 'object') {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
-    
+
     const columns = Object.keys(data);
-    const values = Object.values(data);
+    const values = Object.values(data).map(val => {
+      if (val && typeof val === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(val)) {
+        return val.replace('T', ' ') + ':00';
+      }
+      return val;
+    });
     const columnsClause = columns.map(col => `[${col}]`).join(', ');
     const valuesClause = values.map((_, i) => `@p${i}`).join(', ');
-    
+
     const sql = `INSERT INTO [${tableName}] (${columnsClause}) VALUES (${valuesClause})`;
     const params = values.map((val, i) => ({ name: `p${i}`, value: val }));
-    
+
     await query(sql, params);
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -44,22 +49,29 @@ export async function PUT(request) {
     const tableName = body.tableName;
     const data = body.data;
     const condition = body.condition;
-    
+
     if (!data || !condition) {
       return NextResponse.json({ error: 'Invalid data or condition' }, { status: 400 });
     }
-    
+
+    const processValue = (val) => {
+      if (val && typeof val === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(val)) {
+        return val.replace('T', ' ') + ':00';
+      }
+      return val;
+    };
+
     const dataColumns = Object.keys(data);
     const condColumns = Object.keys(condition);
     const setClause = dataColumns.map((col, i) => `[${col}] = @s${i}`).join(', ');
     const whereClause = condColumns.map((col, i) => `[${col}] = @w${i}`).join(' AND ');
-    
+
     const sql = `UPDATE [${tableName}] SET ${setClause} WHERE ${whereClause}`;
     const params = [
-      ...dataColumns.map((col, i) => ({ name: `s${i}`, value: data[col] })),
-      ...condColumns.map((col, i) => ({ name: `w${i}`, value: condition[col] })),
+      ...dataColumns.map((col, i) => ({ name: `s${i}`, value: processValue(data[col]) })),
+      ...condColumns.map((col, i) => ({ name: `w${i}`, value: processValue(condition[col]) })),
     ];
-    
+
     const result = await query(sql, params);
     return NextResponse.json({ success: true, updated: result.rowsAffected[0] });
   } catch (error) {

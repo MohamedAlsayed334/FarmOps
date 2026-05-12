@@ -26,28 +26,28 @@ export default function TableDelete({ tableName, onSuccess }) {
       'FARM_SPECIALIZATION': ['CROPTYPEID', 'FARMID'],
       'HARVEST_BATCH': ['FARMID', 'BATCHID', 'CROPTYPEID', 'HARVEST_DATE', 'AVAILABLE_QTY', 'UNIT_PRICE'],
       'ORDERS': ['RESTAURANTID', 'ORDERID', 'ORDER_DATE', 'ORDER_STATUS'],
-      'ORDER_LINE': ['RESTAURANTID', 'ORDERID', 'ORDERLINEID', 'FARMID', 'BATCHID', 'TRIP_ID', 'ORDER_LINE_ID', 'QUANTITY'],
+      'ORDER_LINE': ['RESTAURANTID', 'ORDERID', 'ORDERLINEID', 'FARMID', 'BATCHID', 'QUANTITY'],
       'DELIVARY_TRIP_LINE': ['TRIP_ID', 'ORDER_LINE_ID', 'TRIPID', 'RESTAURANTID', 'ORDERID', 'ORDERLINEID', 'STOP_SEQUENCE', 'ACTUAL_DELIVERY_TIME'],
     };
-    
+
     return columnsMap[tableName] || [];
   };
 
   const getPrimaryKey = () => {
     const pkMap = {
-      'CROP_TYPE': 'CROPTYPEID',
-      'FARM': 'FARMID',
-      'DRIVER': 'DRIVERID',
-      'TRUCK': 'TRUCK_ID',
-      'RESTAURANT': 'RESTAURANTID',
-      'DELIVARY_TRIP': 'TRIPID',
-      'FARM_SPECIALIZATION': null,
-      'HARVEST_BATCH': null,
-      'ORDERS': null,
-      'ORDER_LINE': null,
-      'DELIVARY_TRIP_LINE': null,
+      'CROP_TYPE': ['CROPTYPEID'],
+      'FARM': ['FARMID'],
+      'DRIVER': ['DRIVERID'],
+      'TRUCK': ['TRUCK_ID'],
+      'RESTAURANT': ['RESTAURANTID'],
+      'DELIVARY_TRIP': ['TRIPID'],
+      'FARM_SPECIALIZATION': ['CROPTYPEID', 'FARMID'],
+      'HARVEST_BATCH': ['FARMID', 'BATCHID'],
+      'ORDERS': ['RESTAURANTID', 'ORDERID'],
+      'ORDER_LINE': ['RESTAURANTID', 'ORDERID', 'ORDERLINEID'],
+      'DELIVARY_TRIP_LINE': ['TRIP_ID', 'ORDER_LINE_ID'],
     };
-    return pkMap[tableName];
+    return pkMap[tableName] || [];
   };
 
   useEffect(() => {
@@ -61,10 +61,10 @@ export default function TableDelete({ tableName, onSuccess }) {
       if (!res.ok) throw new Error('Failed to fetch');
       const result = await res.json();
       setData(result);
-      
+
       const pk = getPrimaryKey();
-      if (pk && result.length > 0) {
-        setConditionColumn(pk);
+      if (pk.length === 1) {
+        setConditionColumn(pk[0]);
       } else {
         const cols = getColumnNames();
         if (cols.length > 0) setConditionColumn(cols[0]);
@@ -101,15 +101,11 @@ export default function TableDelete({ tableName, onSuccess }) {
         }
 
         const pk = getPrimaryKey();
-        if (!pk) {
-          error('Cannot delete multiple rows - table has composite primary key');
-          return;
-        }
-
         for (const rowJson of selectedRows) {
           const row = JSON.parse(rowJson);
-          const condition = { [pk]: row[pk] };
-          
+          const condition = {};
+          pk.forEach(col => { condition[col] = row[col]; });
+
           await fetch(`/api/tables/${tableName}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
@@ -159,10 +155,10 @@ export default function TableDelete({ tableName, onSuccess }) {
       'FARM_SPECIALIZATION': { 'CROPTYPEID': { type: 'number' }, 'FARMID': { type: 'number' } },
       'HARVEST_BATCH': { 'FARMID': { type: 'number' }, 'BATCHID': { type: 'number' }, 'CROPTYPEID': { type: 'number' }, 'HARVEST_DATE': { type: 'text' }, 'AVAILABLE_QTY': { type: 'number' }, 'UNIT_PRICE': { type: 'number' } },
       'ORDERS': { 'RESTAURANTID': { type: 'number' }, 'ORDERID': { type: 'number' }, 'ORDER_DATE': { type: 'text' }, 'ORDER_STATUS': { type: 'text' } },
-      'ORDER_LINE': { 'RESTAURANTID': { type: 'number' }, 'ORDERID': { type: 'number' }, 'ORDERLINEID': { type: 'number' }, 'FARMID': { type: 'number' }, 'BATCHID': { type: 'number' }, 'TRIP_ID': { type: 'number' }, 'ORDER_LINE_ID': { type: 'number' }, 'QUANTITY': { type: 'number' } },
+      'ORDER_LINE': { 'RESTAURANTID': { type: 'number' }, 'ORDERID': { type: 'number' }, 'ORDERLINEID': { type: 'number' }, 'FARMID': { type: 'number' }, 'BATCHID': { type: 'number' }, 'QUANTITY': { type: 'number' } },
       'DELIVARY_TRIP_LINE': { 'TRIP_ID': { type: 'number' }, 'ORDER_LINE_ID': { type: 'number' }, 'TRIPID': { type: 'number' }, 'RESTAURANTID': { type: 'number' }, 'ORDERID': { type: 'number' }, 'ORDERLINEID': { type: 'number' }, 'STOP_SEQUENCE': { type: 'number' }, 'ACTUAL_DELIVERY_TIME': { type: 'text' } },
     };
-    
+
     return configMap[tableName]?.[colName] || { type: 'text' };
   };
 

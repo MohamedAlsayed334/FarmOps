@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './Sidebar.module.css';
@@ -9,10 +9,6 @@ export default function Sidebar({ isOpen, onClose }) {
   const pathname = usePathname();
   const [tablesExpanded, setTablesExpanded] = useState(true);
   const [queriesExpanded, setQueriesExpanded] = useState(true);
-
-  useEffect(() => {
-    onClose();
-  }, [pathname, onClose]);
 
   return (
     <>
@@ -130,6 +126,36 @@ export default function Sidebar({ isOpen, onClose }) {
                 </Link>
               </>
             )}
+          </div>
+
+          <div className={styles.section}>
+            <div className={styles.sectionTitle}>
+              <span>Inquiry Queries</span>
+            </div>
+            <Link href="/queries/top-crop-by-orders" className={`${styles.navItem} ${pathname === '/queries/top-crop-by-orders' ? styles.active : ''}`}>
+              <span className={styles.icon}>📈</span>
+              <span className={styles.text}>Top Crop by Orders</span>
+            </Link>
+            <Link href="/queries/farms-no-activity-last-month" className={`${styles.navItem} ${pathname === '/queries/farms-no-activity-last-month' ? styles.active : ''}`}>
+              <span className={styles.icon}>🌾</span>
+              <span className={styles.text}>Farms No Activity</span>
+            </Link>
+            <Link href="/queries/top-driver-last-month" className={`${styles.navItem} ${pathname === '/queries/top-driver-last-month' ? styles.active : ''}`}>
+              <span className={styles.icon}>🏆</span>
+              <span className={styles.text}>Top Driver</span>
+            </Link>
+            <Link href="/queries/restaurants-no-orders-last-month" className={`${styles.navItem} ${pathname === '/queries/restaurants-no-orders-last-month' ? styles.active : ''}`}>
+              <span className={styles.icon}>🍽️</span>
+              <span className={styles.text}>Inactive Restaurants</span>
+            </Link>
+            <Link href="/queries/restaurant-batches-last-month" className={`${styles.navItem} ${pathname === '/queries/restaurant-batches-last-month' ? styles.active : ''}`}>
+              <span className={styles.icon}>📦</span>
+              <span className={styles.text}>Restaurant Batches</span>
+            </Link>
+            <Link href="/queries/farm-revenue" className={`${styles.navItem} ${pathname === '/queries/farm-revenue' ? styles.active : ''}`}>
+              <span className={styles.icon}>💰</span>
+              <span className={styles.text}>Farm Revenue</span>
+            </Link>
           </div>
         </nav>
 

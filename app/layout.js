@@ -22,7 +22,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${syne.variable} ${dmMono.variable}`}>
-      <body>
+      <body suppressHydrationWarning>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

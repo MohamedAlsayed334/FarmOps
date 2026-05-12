@@ -79,8 +79,6 @@ export default function TableInsert({ tableName, onSuccess }) {
         'ORDERLINEID': { type: 'number', required: true },
         'FARMID': { type: 'number', required: true },
         'BATCHID': { type: 'number', required: true },
-        'TRIP_ID': { type: 'number', required: false },
-        'ORDER_LINE_ID': { type: 'number', required: false },
         'QUANTITY': { type: 'number', required: true },
       },
       'DELIVARY_TRIP_LINE': {
@@ -109,7 +107,7 @@ export default function TableInsert({ tableName, onSuccess }) {
       'FARM_SPECIALIZATION': ['CROPTYPEID', 'FARMID'],
       'HARVEST_BATCH': ['FARMID', 'BATCHID', 'CROPTYPEID', 'HARVEST_DATE', 'AVAILABLE_QTY', 'UNIT_PRICE'],
       'ORDERS': ['RESTAURANTID', 'ORDERID', 'ORDER_DATE', 'ORDER_STATUS'],
-      'ORDER_LINE': ['RESTAURANTID', 'ORDERID', 'ORDERLINEID', 'FARMID', 'BATCHID', 'TRIP_ID', 'ORDER_LINE_ID', 'QUANTITY'],
+      'ORDER_LINE': ['RESTAURANTID', 'ORDERID', 'ORDERLINEID', 'FARMID', 'BATCHID', 'QUANTITY'],
       'DELIVARY_TRIP_LINE': ['TRIP_ID', 'ORDER_LINE_ID', 'TRIPID', 'RESTAURANTID', 'ORDERID', 'ORDERLINEID', 'STOP_SEQUENCE', 'ACTUAL_DELIVERY_TIME'],
     };
     
