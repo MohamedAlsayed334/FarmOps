@@ -14,7 +14,7 @@ A professional MS SQL Server database management interface built with Next.js 16
 
 ## Tech Stack
 
-- **Next.js 16.2.6** with App Router
+- **Next.js 15.5.18** with App Router
 - **React 19.2.4**
 - **MS SQL Server** via `mssql` library
 - **CSS Modules** for styling
