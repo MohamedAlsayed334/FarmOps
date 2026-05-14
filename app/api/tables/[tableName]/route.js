@@ -42,6 +42,16 @@ export async function POST(request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+// post shapes 
+// columns = ['DRIVERID', 'DRIVERNAME', 'LICENSENUMBER']
+
+// columnsClause = '[DRIVERID], [DRIVERNAME], [LICENSENUMBER]'
+
+// valuesClause = '@p0, @p1, @p2'
+
+// sql = 'INSERT INTO [DRIVER] ([DRIVERID], [DRIVERNAME], [LICENSENUMBER]) VALUES (@p0, @p1, @p2)'
+
+// params = [ { name: 'p0', value: 101 }, { name: 'p1', value: 'John Smith' }, { name: 'p2', value: 12345 } ]
 
 export async function PUT(request) {
   try {
@@ -85,16 +95,16 @@ export async function DELETE(request) {
     const body = await request.json();
     const tableName = body.tableName;
     const condition = body.condition;
-    
+
     if (!condition) {
       return NextResponse.json({ error: 'Condition required' }, { status: 400 });
     }
-    
+
     const condColumns = Object.keys(condition);
     const whereClause = condColumns.map((col, i) => `[${col}] = @p${i}`).join(' AND ');
     const sql = `DELETE FROM [${tableName}] WHERE ${whereClause}`;
     const params = condColumns.map((col, i) => ({ name: `p${i}`, value: condition[col] }));
-    
+
     const result = await query(sql, params);
     return NextResponse.json({ success: true, deleted: result.rowsAffected[0] });
   } catch (error) {

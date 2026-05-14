@@ -9,7 +9,15 @@ export async function GET() {
       WHERE TABLE_SCHEMA = 'dbo'
       ORDER BY TABLE_NAME, ORDINAL_POSITION
     `);
-    
+    // Raw result from database:
+    // [
+    //   { TABLE_NAME: 'FARM', COLUMN_NAME: 'FARMID', DATA_TYPE: 'int', IS_NULLABLE: 'NO' },
+    //   { TABLE_NAME: 'FARM', COLUMN_NAME: 'FARM_NAME____', DATA_TYPE: 'varchar', IS_NULLABLE: 'NO' },
+    //   { TABLE_NAME: 'FARM', COLUMN_NAME: 'LOCATION', DATA_TYPE: 'varchar', IS_NULLABLE: 'YES' },
+    //   { TABLE_NAME: 'DRIVER', COLUMN_NAME: 'DRIVERID', DATA_TYPE: 'int', IS_NULLABLE: 'NO' },
+    //   // ... more rows
+    // ]
+
     const tables = {};
     result.recordset.forEach(row => {
       if (!tables[row.TABLE_NAME]) {
@@ -25,7 +33,19 @@ export async function GET() {
         nullable: row.IS_NULLABLE === 'YES',
       });
     });
-    
+
+    //  result:
+    // [
+    //   {
+    //     name: 'FARM',
+    //     displayName: 'FARM',
+    //     columns: [
+    //       { name: 'FARMID', type: 'int', nullable: false },
+    //       { name: 'FARM_NAME____', type: 'varchar', nullable: false },
+    //       { name: 'LOCATION', type: 'varchar', nullable: true }
+    //     ]
+    //   },.........]
+
     return NextResponse.json(Object.values(tables));
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
