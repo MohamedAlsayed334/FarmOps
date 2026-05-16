@@ -23,6 +23,8 @@ export async function POST(request) {
     }
 
     const columns = Object.keys(data);
+    // Input from datetime-local input: "2024-01-15T14:30"
+    // Converted to SQL format: "2024-01-15 14:30:00"
     const values = Object.values(data).map(val => {
       if (val && typeof val === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(val)) {
         return val.replace('T', ' ') + ':00';
