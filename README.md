@@ -1,7 +1,5 @@
 # FarmOps - Database Manager
 
-> **Note:** This project was renamed from `my-next-app` to `farmops-db-manager`
-
 A professional MS SQL Server database management interface built with Next.js 16.
 
 ## Features
@@ -39,6 +37,16 @@ DB_USER=your_username
 DB_PASSWORD=your_password
 DB_NAME=FarmDelivaryDB
 ```
+###  <span style="color: red;">⚠️ Important</span> 
+<details>
+
+```
+1- You need to make new login to your SQL Server instance(from security folder in your server).
+2- Give the user permission to access the database(own,read,write).
+3-  Make sure you have SQL Server Management Studio installed.
+4- From SQL Server Management Studio you need to allow TCP/IP protocol as it disabled by default(put the ip in port 1433).
+```
+</details>
 
 ### 3. Run Development Server
 
@@ -129,16 +137,3 @@ npm run lint     # Run ESLint
 - **Active Route Highlighting** - See current location in sidebar
 - **Loading States** - Spinners and loading indicators
 - **Error Handling** - Graceful error displays with retry options
-
-## Design
-
-- Dark theme with deep backgrounds
-- Lime green accent color (#e8ff47)
-- Syne font for headings
-- DM Mono font for body/code
-- Smooth transitions and hover effects
-- Card-based UI with colored borders
-
-## License
-
-Private - FarmOps Database Manager
